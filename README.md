@@ -1,4 +1,4 @@
-# a2a-coder v3.0 — A2A 三层递归编码 Skill
+# a2a-coder v3.2 — A2A 三层递归编码 Skill
 
 ## 这是什么
 
@@ -10,11 +10,19 @@
 源自 DeviceSimulator v3（Java 重写 4096 设备压测工具）项目全流程实践验证
 （24 提交 / 13 子任务 / 5 轮现场迭代 / 189 测试），v3.0 的五项结构性改进全部对应真实缺陷。
 
+## v3.2 新增：需求确认门禁联动（配合 /req-confirm-gate v1.2+）
+
+- **设计阶段多Agent需求确认**：设计门产出需求分析后，主控 spawn ≥3 视角代理并行提取确认项，主控汇总输出统一确认单——对冲单视角遗漏与复合条目打包逃逸
+- **门禁凭据双验**：确认单头部已解除标记 + 用户原话逐字引用，缺一不放行；无落盘凭据视为未解除
+- **单一权威**：确认单是需求确认的唯一 source of truth，OPEN_ASSUMPTIONS 是其运行期视图；实现期歧义走 OPEN_ASSUMPTIONS→收口销账
+- **作用域裁决**：门禁是入口门禁（设计门末→拆解门前），总体方案确认后的自动链启不因确认单中断
+- 豁免类目单一权威收敛（紧急 bug 修复/单文件小改动/纯调研/纯对话）；版本握手不足显式警告
+
 ## 安装（ZCode / Claude Code 类环境）
 
 把 `SKILL.md` 放入目标环境的 skill 目录，例如：
-- Windows: `C:\Users\<user>\.zcode\skills\a2a-coder\SKILL.md`
-- 或项目级: `<project>/.zcode/skills/a2a-coder/SKILL.md`
+- Windows: `C:\Users\<user>\.claude\skills\a2a-coder\SKILL.md`
+- 或项目级: `<project>/.claude/skills/a2a-coder/SKILL.md`
 
 重启会话后即可用 `/a2a-coder` 或在对话中引用调用。
 
