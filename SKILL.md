@@ -1,12 +1,12 @@
 ---
 name: a2a-coder
-description: A2A 三层递归编码 skill——主 Agent（高阶模型）分析需求、按功能模块拆子任务、多轮评审后人工确认；各子任务由独立 Agent 并行开发、各自 ≥3 轮评审后实现；子任务过大则高阶继续拆为 byte≤1MB 且 token≤256K 的串行任务归子任务管控，低阶模型机械执行。吸收原 pipeline 的模型分级与降级熔断。单 skill 跑完"需求→拆解→执行→收尾"全生命周期；强调防 AI 幻觉与可验证验收。v3.0 新增：L2.5 装配验证（堵 fake 缝隙盲区）、跨子任务契约落代码骨架、重写类项目参考语义忠实度矩阵、主控 checkpoint 与核验标准化。v3.1：需求确认单门禁联动（/req-confirm-gate）。v3.2：设计阶段多Agent多视角提取确认项、主控汇总输出；门禁凭据双验（解除标记+用户原话）、豁免类目单一权威收敛、自动链启与门禁作用域裁决。v3.3：auto mode 协同——分类器事件三臂字面关键字分流、五态报告 BLOCKED_AUTH、命令整形、git 权上收主控、回家报告、allowlist 立法纪律、重访触发器。协同 /frontend-design（若装，前端品味）+ /timesheet（工时记录）+ /req-confirm-gate（需求确认门禁，需 v1.2+）+ /review-gate（评审核验，需 v1.0+）。v3.4：/review-gate 协同（发现核验/销账台账/Pre-existing 基线豁免/敏感区 Deep 档）、评审发现路由与收敛细则（仅 CONFIRMED 进循环/风格类丢弃/不重复已销账/修全类）、敏感区标注不新增暂停点、五态与暂停点口径统一（修 v3.3 遗留不一致）。
-version: 3.4
+description: A2A 三层递归编码 skill——主 Agent（高阶模型）分析需求、按功能模块拆子任务、多轮评审后人工确认；各子任务由独立 Agent 并行开发、各自 ≥3 轮评审后实现；子任务过大则高阶继续拆为 byte≤1MB 且 token≤256K 的串行任务归子任务管控，低阶模型机械执行。吸收原 pipeline 的模型分级与降级熔断。单 skill 跑完"需求→拆解→执行→收尾"全生命周期；强调防 AI 幻觉与可验证验收。v3.0 新增：L2.5 装配验证（堵 fake 缝隙盲区）、跨子任务契约落代码骨架、重写类项目参考语义忠实度矩阵、主控 checkpoint 与核验标准化。v3.1：需求确认单门禁联动（/req-confirm-gate）。v3.2：设计阶段多Agent多视角提取确认项、主控汇总输出；门禁凭据双验（解除标记+用户原话）、豁免类目单一权威收敛、自动链启与门禁作用域裁决。v3.3：auto mode 协同——分类器事件三臂字面关键字分流、五态报告 BLOCKED_AUTH、命令整形、git 权上收主控、回家报告、allowlist 立法纪律、重访触发器。协同 /ui-ux-pro-max（若装，界面设计智能）+ /timesheet（工时记录）+ /req-confirm-gate（需求确认门禁，需 v1.2+）+ /review-gate（评审核验，需 v1.0+）。v3.4：/review-gate 协同（发现核验/销账台账/Pre-existing 基线豁免/敏感区 Deep 档）、评审发现路由与收敛细则（仅 CONFIRMED 进循环/风格类丢弃/不重复已销账/修全类）、敏感区标注不新增暂停点、五态与暂停点口径统一（修 v3.3 遗留不一致）。v3.5：界面设计协同件 /frontend-design→/ui-ux-pro-max（可检索风格/产品配色/字体配对/UX 准则（含可访问性）/图标/动效/图表+栈绑定实现指引，覆盖 Web/移动/桌面）。
+version: 3.5
 author: Liu Haitao
 license: MIT
 ---
 
-# A2A 三层递归编码（A2A Coder）v3.4
+# A2A 三层递归编码（A2A Coder）v3.5
 
 ## 需求确认门禁（v3.2 修订——前置强制条件，需 /req-confirm-gate v1.2+）
 
@@ -265,7 +265,7 @@ v2.9 实践教训：主控单会话跑完全流程时，后段出现核验假阴
 
 - **需求确认门禁**：设计门收口后、拆解门前调 `/req-confirm-gate`（若已装 v1.2+）——**主控 spawn ≥3 视角代理并行提取确认项、汇总输出确认单**，回填完毕双验凭据（解除标记+用户原话）解除后才允许拆解；确认单是 OPEN_ASSUMPTIONS 的结构化权威载体，实现期新假设走 OA→收口销账。未装/版本不足则显式警告后退化为原流程人工确认。
 - **评审核验**：评审门产出的问题清单与收口重跑核验调 `/review-gate`（若装 v1.0+）——多 agent 找 bug + 独立核验（CONFIRMED 附复读证据/误报附理由）、Important/Nit/Pre-existing 标签、销账台账四去向、Deep 档安全门（叠 enterprise-secure-dev）、同类发现重复 ≥2 次固化进项目 REVIEW.md；仅 CONFIRMED 发现进修复循环（见"调试根因"节评审发现路由）。未装/版本不足则显式警告「评审核验退化为主控/子任务自核」，流程不阻断。
-- **前端设计**：涉及前端页面/组件时叠用 `/frontend-design`（若环境已装；视觉品味/方向，栈无关，未装则按当前栈规范自行把关）；它管"好看有辨识度"（hero/字体配对/标志性元素/克制动效/两遍脑暴-批判），不替你管栈绑定工程坑（组件 API/kebab-case/自闭合等按当前栈规范）。
+- **界面设计**：涉及界面页面/组件（Web/移动/桌面）时叠用 `/ui-ux-pro-max`（若环境已装；可检索设计智能库——风格/产品配色/字体配对/UX 准则（含可访问性）/图标/动效/图表，附栈绑定实现指引，未装则按当前栈规范自行把关）；它管"好看有辨识度且可用性达标"（查 UX 准则先语义结果词、栈绑定实现用 `--stack` 查），项目自有工程约定（组件 API/kebab-case/自闭合等）仍按当前栈规范。
 - **工时统计**：每段实质工作块结束（设计门冻结 / 批 checkpoint / 整体验收）调 `/timesheet log` 追加工时，体现工作内容与 AI+人工+思考三类时长。
 - **多模型编排**：原 `/pipeline` 的模型分级与降级熔断已由本 skill 吸收（见"模型分级"节），`/pipeline` 已废弃，不再演进。新需求一律用本 skill。
 
@@ -358,7 +358,7 @@ Claude Code auto mode 下每个有状态工具调用（Bash/Edit/Write/Agent/Wor
 | `Agent tool`(model, subagent_type) | 可派发子 Agent 并指定模型档 | 换为目标平台的子 Agent 派发原语；完全无派发能力 → 触发单Agent降级（见"会话模式"节，四处 carve-out 全部适用） |
 | `Workflow parallel()/pipeline()` | 并行编排原语 | 按文中注明的替代：同消息多次 Agent 调用（隐式 barrier）或逐消息派发（无 barrier） |
 | 模型名 opus/sonnet/haiku/fable | 多模型分档订阅 | 无分档 → 按"模型分级·预算硬约束"退化为任务书预算硬上限；单Agent按 `--premium/--thrifty/默认` 映射目标平台档位 |
-| `/timesheet` `/frontend-design` `/review-gate` 协同 skill | 可选协同件 | 未安装则跳过对应调用点（均为增强项，非流程依赖；流程完整性不受影响） |
+| `/timesheet` `/ui-ux-pro-max` `/review-gate` 协同 skill | 可选协同件 | 未安装则跳过对应调用点（均为增强项，非流程依赖；流程完整性不受影响） |
 | auto mode 分类器（三臂分流/BLOCKED_AUTH/回家报告） | 权限层存在且拒绝信息可判读 | 无权限层环境：BLOCKED_AUTH 退化为 BLOCKED，本节条款自动失效不冲突 |
 | `deploy/a2a_state/` 落盘路径 | 可写工作目录 | 任意可写目录均可，保持"快照+续跑指令合并单文件"约定即可 |
 | `/clear` `/context` | 用户级会话命令 | 换目标平台的等价会话重置/上下文查看命令 |
